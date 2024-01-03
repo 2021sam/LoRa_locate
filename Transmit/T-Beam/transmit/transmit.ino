@@ -1,4 +1,6 @@
-// esp32 --> T-Beam
+// Setup:
+//   Tools -> Boards -> Boards Manager -> esp32 -> install esp32 by Espressif Systems
+//   Tools -> Board -> esp32 --> T-Beam
 
 #include <LoRa.h>
 #include "boards.h"

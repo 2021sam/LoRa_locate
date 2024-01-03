@@ -1,4 +1,6 @@
-// TTGO LoRa32-OLED
+// Setup:
+//   Tools -> Boards -> Boards Manager -> esp32 -> install esp32 by Espressif Systems
+//   Tools -> Board -> TTGO LoRa32-OLED
 
 
 #include <LoRa.h>
