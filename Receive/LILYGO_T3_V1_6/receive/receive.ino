@@ -1,6 +1,11 @@
 // Setup:
+//  Board:
 //   Tools -> Boards -> Boards Manager -> esp32 -> install esp32 by Espressif Systems
 //   Tools -> Board -> TTGO LoRa32-OLED
+
+//  Libraries:
+      // https://github.com/sandeepmistry/arduino-LoRa
+      // https://github.com/olikraus/u8g2
 
 
 #include <LoRa.h>
@@ -10,6 +15,9 @@
 String recv1 = "";
 String recv2 = "";
 String recv3 = "";
+#define ARRAYSIZE 100
+// String gps_path[10];
+String gps_path[ARRAYSIZE] = {"uno", "duo", "tri"};
 
 //#define USE_PIN // Uncomment this to use PIN during pairing. The pin is specified on the line below
 const char *pin = "1234"; // Change this to more secure PIN.
@@ -57,36 +65,63 @@ void setup()
     bluetooth_setup();
 }
 
-void bluetooth_loop(String recv)
+void transmit_Bluetooth(String recv)
 {
-  int c = 0;
-  while (SerialBT.available())
-  {
-    Serial.write(SerialBT.read());
-    c++;
-  }
-
-  if (c)
-  {
-    // Serial.println(c);
-    SerialBT.printf(".https://www.google.com/maps/dir//{recv}");
-    // SerialBT.print(recv);
-  }
-  // SerialBT.printf("https://www.google.com/maps/dir//%s", recv);
-    SerialBT.println("https://www.google.com/maps/dir//" + recv);
+  SerialBT.println("https://www.google.com/maps/dir//" + recv);
   delay(20);
 }
 
 
+void bluetooth_loop()
+{
+        String recv = "";
+        char incoming_char = '\0';
+        int c = 0;
+        while (SerialBT.available()) {
+          incoming_char = (char)SerialBT.read();
+          if(incoming_char != '\n' && incoming_char != '\r')
+          {
+                      recv += incoming_char;
+          // recv += (char)SerialBT.read();
+          // Serial.println(recv);
+          c++;
+
+          }
+        }
+       
+        if (recv.length())
+        {
+          Serial.print("c: ");
+           Serial.println(c);
+          //   Serial.print("Bluetooth: ");
+          //   Serial.println(recv);
+            if (recv.equals("log"))
+            // if (recv.substring(0, 3) == "log")
+            {
+              Serial.println("Received LOG command:");
+              for (int i = 0; i< count_received; i++){
+                Serial.print(i);
+                Serial.print(": ");
+                Serial.println(gps_path[i]);
+                SerialBT.println(gps_path[i]);
+                // delay(20);
+              }
+              SerialBT.print("GPS pins: ");
+              SerialBT.println(count_received);
+            }
+        }
+}
+
 void transmit_LoRa()
 {
-            Serial.println("transmit_LoRa");
+          Serial.println("transmit_LoRa");
           LoRa.beginPacket();
           LoRa.print("hello LoRa bany");
           // LoRa.print(count_received);
           LoRa.endPacket();
           // delay(1000);
 }
+
 
 void loop()
 {
@@ -101,6 +136,7 @@ void loop()
         if (recv.length() > 0)
         {
           // Serial.print("count_received:");
+          gps_path[count_received] = recv;
           Serial.print(++count_received);
           Serial.print(": ");
           Serial.println(recv);
@@ -110,6 +146,7 @@ void loop()
           LoRa.print("Confirm: ");
           LoRa.print(count_received);
           LoRa.endPacket();
+          transmit_Bluetooth(recv);
         }
 
         
@@ -136,7 +173,9 @@ void loop()
             u8g2->sendBuffer();
         }
 // #endif
-    bluetooth_loop(recv);
+    // bluetooth_loop(recv);
+    // transmit_Bluetooth(recv);
     }
     // transmit_LoRa();
+    bluetooth_loop();
 }
