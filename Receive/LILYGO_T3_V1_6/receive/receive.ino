@@ -15,8 +15,7 @@
 String recv1 = "";
 String recv2 = "";
 String recv3 = "";
-#define ARRAYSIZE 100
-// String gps_path[10];
+#define ARRAYSIZE 1000
 String gps_path[ARRAYSIZE] = {"uno", "duo", "tri"};
 
 //#define USE_PIN // Uncomment this to use PIN during pairing. The pin is specified on the line below
@@ -95,20 +94,33 @@ void bluetooth_loop()
            Serial.println(c);
           //   Serial.print("Bluetooth: ");
           //   Serial.println(recv);
+
+          if (recv.equals("clear"))
+          {
+            count_received = 0;
+          }
+
+
+          if (recv.equals("count"))
+          {
+              SerialBT.print("GPS pins: ");
+              SerialBT.println(count_received);             
+          }
+
+
             if (recv.equals("log"))
             // if (recv.substring(0, 3) == "log")
             {
-              Serial.println("Received LOG command:");
-              for (int i = 0; i< count_received; i++){
+              Serial.println("Latitude,Longitude");
+              SerialBT.println("Latitude,Longitude");
+              for (int i = 0; i < count_received; i++){
                 Serial.print(i);
                 Serial.print(": ");
                 Serial.println(gps_path[i]);
                 SerialBT.println(gps_path[i]);
-                // delay(20);
               }
-              SerialBT.print("GPS pins: ");
-              SerialBT.println(count_received);
             }
+          
         }
 }
 
