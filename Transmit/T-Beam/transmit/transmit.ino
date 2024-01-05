@@ -3,6 +3,14 @@
 //   Tools -> Board -> esp32 --> T-Beam
 //   https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series
 
+//  Libraries:
+      // https://github.com/sandeepmistry/arduino-LoRa
+      // https://github.com/olikraus/u8g2
+      // https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series/tree/master/lib/XPowersLib
+      // https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series/tree/master/lib/TinyGPSPlus
+      // https://github.com/arkhipenko/TaskSchedulers
+      
+
 #include <LoRa.h>
 #include "boards.h"
 #include <TinyGPS++.h>
@@ -14,8 +22,10 @@ int count_sent = 0;
 int count_received = 0;
 float latitude = 0;
 float longitude = 0;
-
-
+int satellites = 0;
+float hdop = 0;
+float altitude_meters = 0;
+float speed_kmph = 0;
 
 #define PERIOD1 1000
 #define DURATION 10000
@@ -29,11 +39,23 @@ void transmit_sos(){
    {
     latitude = gps.location.lat();
     longitude = gps.location.lng();
-
+    int satellites = gps.satellites.value();
+    float hdop = gps.hdop.hdop();
+    float altitude_meters = gps.altitude.meters();
+    float speed_kmph = gps.speed.kmph();
+    // Serial.printFloat(gps.course.deg(), gps.course.isValid(), 7, 2);
     LoRa.beginPacket();
+    LoRa.print(satellites);
+    LoRa.print(",");
+    LoRa.print(hdop);
+    LoRa.print(",");
     LoRa.print(latitude, 6);
     LoRa.print(",");
     LoRa.print(longitude, 6);
+    LoRa.print(",");
+    LoRa.print(altitude_meters);
+    LoRa.print(",");
+    LoRa.print(speed_kmph);
     LoRa.endPacket();
   
     count_sent++;

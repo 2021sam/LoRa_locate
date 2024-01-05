@@ -112,8 +112,9 @@ void bluetooth_loop()
             if (recv.equals("log"))
             // if (recv.substring(0, 3) == "log")
             {
-              Serial.println("Latitude,Longitude");
-              SerialBT.println("Latitude,Longitude");
+              Serial.println("Satellites,HDOP,Latitude,Longitude,Altitude_meters,speed_kmph");
+              SerialBT.println("Satellites,HDOP,Latitude,Longitude,Altitude_meters,speed_kmph");
+              // SerialBT.println("Latitude,Longitude");
               for (int i = 0; i < count_received; i++){
                 Serial.print(i);
                 Serial.print(": ");
@@ -132,7 +133,6 @@ void transmit_LoRa()
           LoRa.print("hello LoRa bany");
           // LoRa.print(count_received);
           LoRa.endPacket();
-          // delay(1000);
 }
 
 
