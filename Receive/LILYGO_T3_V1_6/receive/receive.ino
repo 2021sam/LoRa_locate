@@ -2,6 +2,7 @@
 //  Board:
 //   Tools -> Boards -> Boards Manager -> esp32 -> install esp32 by Espressif Systems
 //   Tools -> Board -> TTGO LoRa32-OLED
+//   https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series
 
 //  Libraries:
       // https://github.com/sandeepmistry/arduino-LoRa

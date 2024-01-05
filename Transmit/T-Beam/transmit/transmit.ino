@@ -1,6 +1,7 @@
 // Setup:
 //   Tools -> Boards -> Boards Manager -> esp32 -> install esp32 by Espressif Systems
 //   Tools -> Board -> esp32 --> T-Beam
+//   https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series
 
 #include <LoRa.h>
 #include "boards.h"
