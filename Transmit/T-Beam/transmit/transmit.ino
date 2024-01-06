@@ -24,6 +24,8 @@ float latitude = 0;
 float longitude = 0;
 int satellites = 0;
 float hdop = 0;
+// String gps_date = "";
+String gps_time = "";
 float altitude_meters = 0;
 float speed_kmph = 0;
 
@@ -34,6 +36,24 @@ Task sos ( 10000, TASK_FOREVER, &transmit_sos );
 Scheduler runner;
 
 
+
+String get_GPS_Time(TinyGPSTime &t)
+{
+  char sz[32];
+  if (!t.isValid())
+  {
+    Serial.print(F("******** "));
+  }
+  else
+  {
+    sprintf(sz, "%02d:%02d:%02d", t.hour(), t.minute(), t.second());
+    // Serial.print(sz);
+  }
+  return String(sz);
+}
+
+
+
 void transmit_sos(){
     if (gps.location.isValid())
    {
@@ -41,13 +61,21 @@ void transmit_sos(){
     longitude = gps.location.lng();
     int satellites = gps.satellites.value();
     float hdop = gps.hdop.hdop();
+    // gps_date = char_to_String(gps.date);
+    gps_time = get_GPS_Time(gps.time);
     float altitude_meters = gps.altitude.meters();
     float speed_kmph = gps.speed.kmph();
     // Serial.printFloat(gps.course.deg(), gps.course.isValid(), 7, 2);
+    // Serial.print("Time: ");
+    // Serial.println(gps_time);
+    delay(10);
+
     LoRa.beginPacket();
     LoRa.print(satellites);
     LoRa.print(",");
     LoRa.print(hdop);
+    LoRa.print(",");
+    LoRa.print(gps_time);
     LoRa.print(",");
     LoRa.print(latitude, 6);
     LoRa.print(",");

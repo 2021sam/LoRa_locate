@@ -112,8 +112,8 @@ void bluetooth_loop()
             if (recv.equals("log"))
             // if (recv.substring(0, 3) == "log")
             {
-              Serial.println("Satellites,HDOP,Latitude,Longitude,Altitude_meters,speed_kmph");
-              SerialBT.println("Satellites,HDOP,Latitude,Longitude,Altitude_meters,speed_kmph");
+              Serial.println("Satellites,HDOP,Time,Latitude,Longitude,Altitude_meters,speed_kmph");
+              SerialBT.println("Satellites,HDOP,Time,Latitude,Longitude,Altitude_meters,speed_kmph");
               // SerialBT.println("Latitude,Longitude");
               for (int i = 0; i < count_received; i++){
                 Serial.print(i);
