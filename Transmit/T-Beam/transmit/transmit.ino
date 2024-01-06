@@ -39,7 +39,6 @@ Task sos ( 10000, TASK_FOREVER, &transmit_sos );
 Scheduler runner;
 
 
-
 String get_GPS_Time(TinyGPSTime &t)
 {
   char sz[32];
@@ -50,11 +49,9 @@ String get_GPS_Time(TinyGPSTime &t)
   else
   {
     sprintf(sz, "%02d:%02d:%02d", t.hour(), t.minute(), t.second());
-    // Serial.print(sz);
   }
   return String(sz);
 }
-
 
 
 void transmit_sos(){
@@ -112,7 +109,6 @@ void setup()
         Serial.println("Starting LoRa failed!");
         while (1);
     }
-    //  Sams GPS
     delay(1500);
     Serial.print(F("Testing TinyGPS++ library v. "));
     Serial.println(TinyGPSPlus::libraryVersion());
